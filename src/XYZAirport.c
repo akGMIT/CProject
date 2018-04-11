@@ -39,15 +39,15 @@ void main() {
 	displayList(headPtr);
 }
 
-void addPassengerAtStart(struct Passenger** head){
+void addPassengerAtStart(Passenger** head){
 	Passenger* newPassenger;
 	newPassenger = (Passenger*)malloc(sizeof(Passenger));
-
+	newPassenger = createPassenger();
 	newPassenger->next = *head;
 	*head = newPassenger;
 }
 
-Passenger * createPassenger(){
+struct Passenger * createPassenger(){
 	struct Passenger * new_passenger = (Passenger*)malloc(sizeof(Passenger));
 
 	if(new_passenger == NULL){
@@ -81,13 +81,13 @@ Passenger * createPassenger(){
 
 void displayList(Passenger* head)
 {
-	struct Passenger* curr;
+	Passenger* curr;
 
 	curr = head;
 
 	while (curr != NULL)
 	{
-		printf("The name is %s\n", curr->passportNumber);
+		printf("The name is %d\n", curr->passportNumber);
 		curr = curr->next;
 	}
 
