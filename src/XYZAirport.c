@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Passenger{
 	int passportNumber;
@@ -25,40 +26,92 @@ typedef struct Passenger{
 }Passenger;
 
 void addPassengerAtStart(struct Passenger** head);
-struct Passenger * createPassenger();
+struct Passenger * createPassenger(Passenger * head, int passportNum);
 void displayList(struct Passenger* head);
+int searchPassengerList(Passenger * head, int passportNum);
+void passportUnique(int passportNum, Passenger * head);
+void sortList(Passenger ** head);
+Passenger * swapNodeData(Passenger * temp1, Passenger * temp2);
+//void updatePassenger(Passenger ** head, int position);
 
 void main() {
 
 	struct Passenger* headPtr = NULL;
+	int choice;
 
-	for(int i = 0; i < 3; i++){
-		addPassengerAtStart(&headPtr);
+	printf("Please enter 1 to add passenger\n");
+	printf("Please enter 2 sort list\n");
+	printf("Please enter 3 to display the list\n");
+	printf("Please enter 4 to display the list in reverse\n");
+	printf("Please enter -1 to exit\n");
+	scanf("%d", &choice);
+
+
+	while(choice != -1){
+		switch(choice){
+		case 1:
+			addPassengerAtStart(&headPtr);
+			break;
+		case 2:
+			sortList(&headPtr);
+			break;
+		case 3:
+			displayList(headPtr);
+			break;
+		}
+		printf("Please enter 1 to add passenger\n");
+		printf("Please enter 2 sort list\n");
+		printf("Please enter 3 to display the list\n");
+		printf("Please enter 4 to display the list in reverse\n");
+		printf("Please enter -1 to exit\n");
+		scanf("%d", &choice);
 	}
-
-	displayList(headPtr);
 }
 
 void addPassengerAtStart(Passenger** head){
 	Passenger* newPassenger;
+	int passportNum;
+	int passengerIndex;
+	int choice;
+
 	newPassenger = (Passenger*)malloc(sizeof(Passenger));
-	newPassenger = createPassenger();
-	newPassenger->next = *head;
-	*head = newPassenger;
+	//Passenger * tempPas = *head;
+
+	printf("Enter new passengers passport number: ");
+	scanf("%d", &passportNum);
+	passengerIndex = searchPassengerList(*head, passportNum);
+	printf("%d", passengerIndex);
+	if(passengerIndex > 0){
+		printf("\nPassenger with this passport number already exists in database.");
+		printf("\nWould you like to update details?");
+		printf("\n1. Yes 2. No");
+		scanf("%d", &choice);
+		if(choice == 1){
+			//updatePassenger(&tempPas, passengerIndex);
+		}else{
+			return;
+		}
+	}else{
+		newPassenger = createPassenger(*head, passportNum);
+		newPassenger->next = *head;
+		*head = newPassenger;
+	}
+
+
 }
 
-struct Passenger * createPassenger(){
+struct Passenger * createPassenger(Passenger * head, int passportNum){
 	struct Passenger * new_passenger = (Passenger*)malloc(sizeof(Passenger));
 
 	if(new_passenger == NULL){
 		puts("Error creating new passenger");
 		return 0;
 	}else{
-		printf("Enter new passengers passport number: ");
-		scanf("%d", &new_passenger->passportNumber);
-		/*printf("Enter first name: ");
+		new_passenger->passportNumber = passportNum;
+
+		printf("Enter first name: ");
 		scanf("%s", new_passenger->firstName);
-		printf("Enter second name: ");
+		/*printf("Enter second name: ");
 		scanf("%s", new_passenger->secondName);
 		printf("Enter date of birth in format ddmmyyyy: ");
 		scanf("%d", &new_passenger->DOB);
@@ -93,3 +146,74 @@ void displayList(Passenger* head)
 
 
 }
+
+void passportUnique(int passportNum, Passenger * head){
+	int result;
+
+	result = searchPassengerList(head, passportNum);
+
+	if (result != -1)
+	{
+		printf("Not a unique ID\n");
+		return;
+	}
+}
+
+int searchPassengerList(Passenger * head, int passportNum){
+	Passenger * curr = head;
+	int position = 0;
+
+	while(curr != NULL){
+		position++;
+		printf("%d ", curr->passportNumber);
+		if(passportNum == curr->passportNumber){
+			printf("---%d", position);
+			return position;
+		}
+		curr = curr->next;
+	}
+	return -1;
+}
+
+void sortList(Passenger ** head){
+	Passenger *temp3 = (Passenger*)malloc(sizeof(Passenger));
+	Passenger *temp1;
+	Passenger *temp2;
+
+	for(temp1=*head;temp1!=NULL;temp1=temp1->next)
+	{
+		for(temp2=temp1->next;temp2!=NULL;temp2=temp2->next)
+		{
+			if(temp2->passportNumber < temp1->passportNumber)
+			{
+				temp3 = swapNodeData(temp3,temp1);
+				temp1 = swapNodeData(temp1, temp2);
+				temp2 = swapNodeData(temp2, temp3);
+			}
+		}
+	}
+}
+
+Passenger * swapNodeData(Passenger * temp1, Passenger * temp2){
+	temp1->passportNumber = temp2->passportNumber;
+	strcpy(temp1->firstName, temp2->firstName);
+
+	return temp1;
+}
+
+/*void updatePassenger(Passenger ** head, int position){
+	Passenger * temp;
+
+	Passenger * newPassenger = (Passenger*)malloc(sizeof(Passenger));
+	int passportNum;
+	newPassenger = *head;
+
+	for (int i = 0;i < position - 2;i++)
+	{
+		newPassenger = newPassenger->next;
+	}
+	printf("Enter new passengers passport number: ");
+	scanf("%d", &passportNum);
+	newPassenger = createPassenger(newPassenger, passportNum);
+
+}*/
