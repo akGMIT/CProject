@@ -35,7 +35,7 @@ void sortList(Passenger ** head);
 Passenger * swapNodeData(Passenger * temp1, Passenger * temp2);
 void updatePassenger(Passenger ** head, int position);
 void loadPassengerListFile(Passenger ** head);
-void displayPassenger(Passenger ** head, int update);
+void displayPassenger(Passenger * head, int update);
 void printPassengerDetails(Passenger * head, int position);
 void deletePassenger(Passenger ** head);
 int listLength(Passenger * head);
@@ -69,10 +69,10 @@ void main() {
         	displayList(headPtr);
             break;
         case 3:
-        	displayPassenger(&headPtr, 0);
+        	displayPassenger(headPtr, 0);
             break;
         case 4:
-        	displayPassenger(&headPtr, 1);
+        	displayPassenger(headPtr, 1);
         	break;
         case 5:
         	deletePassenger(&headPtr);
@@ -143,7 +143,7 @@ void addPassengerAtStart(Passenger** head)
 
         if(choice == 1)
         {
-            updatePassenger(head, passengerIndex);
+            updatePassenger(*head, passengerIndex);
         }
         else
         {
@@ -328,7 +328,7 @@ void updatePassenger(Passenger ** head, int position)
 
 
 
-void displayPassenger(Passenger ** head, int update)
+void displayPassenger(Passenger * head, int update)
 {
 	int choice;
 	int position;
@@ -346,8 +346,8 @@ void displayPassenger(Passenger ** head, int update)
 		printf("Enter passengers passport number: ");
 		scanf("%d", &passportNum);
 
-		position = searchPassengerList(*head,passportNum, "");
-		printPassengerDetails(*head, position);
+		position = searchPassengerList(head,passportNum, "");
+		printPassengerDetails(head, position);
 
 		if(update == 1) updatePassenger(head, position);
 	}
@@ -359,8 +359,8 @@ void displayPassenger(Passenger ** head, int update)
 		printf("Enter passengers second name: ");
 		scanf("%s", secondName);
 
-		position = searchPassengerList(*head, passportNum, strcat(firstName, secondName));
-		printPassengerDetails(*head, position);
+		position = searchPassengerList(head, passportNum, strcat(firstName, secondName));
+		printPassengerDetails(head, position);
 
 		if(update == 1) updatePassenger(head, position);
 	}

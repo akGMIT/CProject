@@ -1,0 +1,29 @@
+void deleteElementAtPos(struct node* top, int position)
+{
+	struct node* curr;
+	struct node* prev_curr;
+	int i;
+
+	curr = top;
+
+	for (i = 0;i < position - 1;i++)
+	{
+		prev_curr = curr;
+		curr = curr->NEXT;
+	}
+
+	prev_curr->NEXT = curr->NEXT;
+	//free(curr);
+}
+
+void deleteElementAtStart(struct node** top)
+{
+	struct node* temp;
+
+	temp = *top;
+
+	*top = temp->NEXT;
+
+	free(temp);
+
+}
