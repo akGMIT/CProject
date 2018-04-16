@@ -1,29 +1,36 @@
-void deleteElementAtPos(struct node* top, int position)
-{
-	struct node* curr;
-	struct node* prev_curr;
-	int i;
 
-	curr = top;
+	const char s[2] = "@.";
+	const char com[3] = "com";
+	char *tok[3];
+	char *token;
+	int tokenCount;
 
-	for (i = 0;i < position - 1;i++)
+
+
+	/* get the first token */
+	token = strtok(email, s);
+	tok[0] = token;
+	tokenCount = 0;
+	printf("%d %s-----\n", tokenCount, tok[0]);
+	/* walk through other tokens */
+	while( token != NULL) 
 	{
-		prev_curr = curr;
-		curr = curr->NEXT;
+		if(tokenCount == 1) tok[1] = token;
+		if(tokenCount == 2) tok[2] = token;
+
+		token = strtok(NULL, s);
+		if(token != NULL)tokenCount++;
+	}
+	if(tokenCount != 2)
+	{
+		printf("Email format is incorrect, try again.\n");
+		return 0;
 	}
 
-	prev_curr->NEXT = curr->NEXT;
-	//free(curr);
-}
+	if(tokenCount == 2 && strcmp(tok[2], com) != 0)
+	{
+		printf("Email format is incorrect, try again.\n");
+		return 0;
+	}
 
-void deleteElementAtStart(struct node** top)
-{
-	struct node* temp;
-
-	temp = *top;
-
-	*top = temp->NEXT;
-
-	free(temp);
-
-}
+	return 1;
